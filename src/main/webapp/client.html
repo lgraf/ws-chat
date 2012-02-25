@@ -1,125 +1,57 @@
 <!DOCTYPE HTML>
 <html lang="en">
-	<head>
-	 <meta charset=utf-8>
-    <title>Amazing Web Socket Chat</title>
-	</head>
+<head>
+	<meta charset=utf-8>
+	<title>Amazing Web Socket Chat</title>
+	<script type="text/javascript" src="resources/js/jquery-1.7.1.js"></script>
+	<script type="text/javascript" src="resources/js/jquery.json-2.3.js"></script>
+	<script type="text/javascript" src="resources/js/jquery.websocket-0.0.1.js"></script>
+	<script type="text/javascript">
+		$(document).ready( function(evt) {
+			var ws = $.websocket($('#tf-server-url').val(), {
+				open : function() {
+					alert('open');
+				},
 	
-	<body>
-	 <table>
-	   <tr>
-	     <td>Server-URL</td>
-	     <td><input id="tf-server-url" /></td>
-       <td><button id="btn-connect">Connect</button></td>
-	   </tr>
-     <tr>
-       <td>Message</td>
-       <td><input id="tf-message" /></td>
-       <td><button id="btn-send">Send</button></td>
-     </tr>
-     <tr>
-       <td>Response</td>
-       <td colspan="2"><textarea id="ta-response" style="width:100%;"></textarea></td>
-     </tr>
-	 </table>
-	 
-	 <script type="text/javascript">
-	  // Sample code from a great tutorial at http://angelozerr.wordpress.com/2011/07/25/websockets_jetty_step2/
-	 
-	  if (!window.WebSocket)
-		    alert("WebSocket not supported by this browser");
+				close : function() {
+					alert('close');
+				},
+	
+				events : {
+					chat : function(e) {
+						var message = e.data;
+						if(undefined !== message)
+							$('#ta-chat').append( message + '\n');
+					}
+				}
+			});
+			
+			$('#btn-send').click(function() {
+				var messageField = $('#tf-message');
+				ws.send('chat', messageField.val());
+				messageField.val('');
+				messageField.focus();
+			});
+		});
+	</script>
+</head>
 
-		  function $() {
-		    return document.getElementById(arguments[0]);
-		  }
-		  
-		  function $v() {
-		    return document.getElementById(arguments[0]).value;
-		  }
-
-		  function getKeyCode(ev) {
-		    if (window.event)
-		      return window.event.keyCode;
-		    return ev.keyCode;
-		  }
-
-		  var room = {
-		    join : function(name) {
-		      this._username = name;
-		      //var location = document.location.toString().replace('http://',
-		      //    'ws://').replace('https://', 'wss://');
-		      var location = $v("tf-server-url");
-		      this._ws = new WebSocket(location);
-		      this._ws.onopen = this._onopen;
-		      this._ws.onmessage = this._onmessage;
-		      this._ws.onclose = this._onclose;
-		      this._ws.onerror = this._onerror;
-		    },
-
-		    chat : function(text) {
-		      if (text != null && text.length > 0)
-		        this._send(room._username, text);
-		    },
-
-		    _onopen : function() {
-// 		      $('join').className = 'hidden';
-// 		      $('joined').className = '';
-// 		      $('phrase').focus();
-		      this._send(room._username, 'has joined!');
-		    },
-
-		    _onmessage : function(m) {
-		      if (m.data) {
-// 		        var c = m.data.indexOf(':');
-// 		        var from = m.data.substring(0, c).replace('<', '&lt;').replace(
-// 		            '>', '&gt;');
-// 		        var text = m.data.substring(c + 1).replace('<', '&lt;')
-// 		            .replace('>', '&gt;');
-
-// 		        var chat = $('chat');
-// 		        var spanFrom = document.createElement('span');
-// 		        spanFrom.className = 'from';
-// 		        spanFrom.innerHTML = from + ':&nbsp;';
-// 		        var spanText = document.createElement('span');
-// 		        spanText.className = 'text';
-// 		        spanText.innerHTML = text;
-// 		        var lineBreak = document.createElement('br');
-// 		        chat.appendChild(spanFrom);
-// 		        chat.appendChild(spanText);
-// 		        chat.appendChild(lineBreak);
-// 		        chat.scrollTop = chat.scrollHeight - chat.clientHeight;
-		    	  $("ta-response").value = m.data;
-		      }
-		    },
-
-		    _onclose : function(m) {
-		      this._ws = null;
-// 		      $('join').className = '';
-// 		      $('joined').className = 'hidden';
-// 		      $('username').focus();
-// 		      $('chat').innerHTML = '';
-		    },
-
-		    _onerror : function(e) {
-		      alert(e);
-		    },
-		    
-		    _send : function(user, message) {
-// 		      user = user.replace(':', '_');
-		      if (this._ws)
-		        this._ws.send(user + ':' + message);
-		    }
-		  };
-
-	 </script>
-	 
-	 <script type="text/javascript">
-	  $("btn-connect").onclick = function(evt){
-															   room.join("Hampelmann"); 
-															 };
-		$("btn-send").onclick = function(evt){
-															room.chat($v("tf-message"));
-														}
-	 </script>
-	</body>
+<body>
+	<table>
+		<tr>
+			<td>Server-URL</td>
+			<td><input id="tf-server-url" value="ws://localhost:8080" /></td>
+			<td><button id="btn-connect">Connect</button></td>
+		</tr>
+		<tr>
+			<td>Message</td>
+			<td><input id="tf-message" /></td>
+			<td><button id="btn-send">Send</button></td>
+		</tr>
+		<tr>
+			<td>Response</td>
+			<td colspan="2"><textarea id="ta-chat" style="width: 100%;"></textarea></td>
+		</tr>
+	</table>
+</body>
 </html>
