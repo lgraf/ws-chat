@@ -40,16 +40,18 @@
 					},
 					events : {
 						enter : function(e) {
-							self._user = e.data;
+// 							_writeMessageToChat( e.data );
 						},
 						message : function(e) {
-							var user = e.data.user;
-							var message = e.data.content;
-							if(undefined !== message)
-								$('#'+config.chat).append( user + ": " + message + '\n');
+							_writeMessageToChat( e.data );
 						}
 					}
 				});
+			}
+			
+			function _writeMessageToChat(message){
+				if(undefined !== message)
+					$('#'+config.chat).append( message + '\n');
 			}
 			
 			function _installListener()

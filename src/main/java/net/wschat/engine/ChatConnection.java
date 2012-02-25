@@ -37,7 +37,7 @@ class ChatConnection implements OnTextMessage, MessageSender {
 	@Override
 	public void sendMessage(String msg) {
 		try {
-			conn.sendMessage(msg);
+			conn.sendMessage("{\"type\":\"message\",\"data\":\"" + msg + "\"}");
 		} catch (IOException e) {
 			close();
 		}
