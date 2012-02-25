@@ -8,50 +8,95 @@
 	<script type="text/javascript" src="resources/js/jquery.websocket-0.0.1.js"></script>
 	<script type="text/javascript">
 		$(document).ready( function(evt) {
-			var ws = $.websocket($('#tf-server-url').val(), {
-				open : function() {
-					alert('open');
-				},
-	
-				close : function() {
-					alert('close');
-				},
-	
-				events : {
-					chat : function(e) {
-						var message = e.data;
-						if(undefined !== message)
-							$('#ta-chat').append( message + '\n');
-					}
-				}
-			});
-			
-			$('#btn-send').click(function() {
-				var messageField = $('#tf-message');
-				ws.send('chat', messageField.val());
-				messageField.val('');
-				messageField.focus();
+			$('#btn-login').click(function() {
+				$('#login').toggle();
+				$('#chat').toggle();
+				var chat = new Chat('ws://localhost:8080', {message : 'tf-message', send : 'btn-send', chat : 'ta-chat'});
+				chat.enter($('#tf-username').val());
 			});
 		});
+	</script>
+	<script type="text/javascript">
+		function Chat(server, config) {
+			
+			var self = this;
+			
+			_installListener();
+			
+			this.enter = function(user) {
+				self._user = user;
+				_createSocket();
+			};
+			
+			this.sendMessage = function(content) {
+ 				self._ws.send('message', new Message(self._user, content));
+			};
+			
+			function _createSocket()
+			{
+				self._ws = $.websocket(server, {
+					open : function() {
+						self._ws.send('enter', self._user);
+					},
+					events : {
+						enter : function(e) {
+							self._user = e.data;
+						},
+						message : function(e) {
+							var user = e.data.user;
+							var message = e.data.content;
+							if(undefined !== message)
+								$('#'+config.chat).append( user + ": " + message + '\n');
+						}
+					}
+				});
+			}
+			
+			function _installListener()
+			{	
+				$('#'+config.send).click( function() {
+					var messageField = $('#'+config.message);
+					self.sendMessage(messageField.val());
+					messageField.val('');
+					messageField.focus();
+				});
+			}
+		};
+		
+		function Message(user, content)
+		{
+			self = this;
+			
+			this.user = user;
+			this.content = content;
+			
+			this.getUser = function() {
+				return self.user;
+			}
+			
+			this.getContent = function() {
+				return self.content;
+			}
+		}
 	</script>
 </head>
 
 <body>
-	<table>
-		<tr>
-			<td>Server-URL</td>
-			<td><input id="tf-server-url" value="ws://localhost:8080" /></td>
-			<td><button id="btn-connect">Connect</button></td>
-		</tr>
-		<tr>
-			<td>Message</td>
-			<td><input id="tf-message" /></td>
-			<td><button id="btn-send">Send</button></td>
-		</tr>
-		<tr>
-			<td>Response</td>
-			<td colspan="2"><textarea id="ta-chat" style="width: 100%;"></textarea></td>
-		</tr>
-	</table>
+	<div id="login">
+		<table>
+			<tr>
+				<td>Username:</td>
+				<td><input id="tf-username" type="text"></td>
+			</tr>
+			<tr>
+				<td colspan="2"><button id="btn-login">Login</button></td>
+			</tr>
+		</table>
+	</div>
+	
+	<div id="chat" style="display:none;">
+		<textarea id="ta-chat" style="width:100%;height:300px;"></textarea>
+		<input id="tf-message" /><button id="btn-send">Send</button>
+	</div>
 </body>
 </html>
