@@ -1,8 +1,10 @@
-package net.wschat;
+package net.wschat.engine;
 
 import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
+
+import net.wschat.chat.MessageSender;
 
 import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
 
@@ -11,8 +13,8 @@ import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
  * 
  * @author achim, 25.02.2012
  */
-class ChatConnection implements OnTextMessage {
-	private List<MessageListener> messageListeners = new CopyOnWriteArrayList<>();
+class ChatConnection implements OnTextMessage, MessageSender {
+	private List<ConnectionListener> messageListeners = new CopyOnWriteArrayList<>();
 	private Connection conn;
 
 	@Override
@@ -32,6 +34,7 @@ class ChatConnection implements OnTextMessage {
 		fireMessage(msg);
 	}
 
+	@Override
 	public void sendMessage(String msg) {
 		try {
 			conn.sendMessage(msg);
@@ -40,26 +43,26 @@ class ChatConnection implements OnTextMessage {
 		}
 	}
 
-	public void addMessageListener(MessageListener l) {
+	public void addMessageListener(ConnectionListener l) {
 		messageListeners.add(l);
 	}
 
-	public void removeMessageListener(MessageListener l) {
+	public void removeMessageListener(ConnectionListener l) {
 		messageListeners.remove(l);
 	}
 
 	private void fireMessage(String msg) {
-		for (MessageListener l : messageListeners)
-			l.onMessage(msg);
+		for (ConnectionListener l : messageListeners)
+			l.onMessage(this, msg);
 	}
 
 	private void fireClose() {
-		for (MessageListener l : messageListeners)
+		for (ConnectionListener l : messageListeners)
 			l.onClose(this);
 	}
 
 	private void fireOpen() {
-		for (MessageListener l : messageListeners)
+		for (ConnectionListener l : messageListeners)
 			l.onOpen(this);
 	}
 

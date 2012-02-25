@@ -1,4 +1,4 @@
-package net.wschat;
+package net.wschat.engine;
 
 import org.eclipse.jetty.server.Server;
 import org.eclipse.jetty.server.handler.DefaultHandler;

@@ -1,4 +1,4 @@
-package net.wschat;
+package net.wschat.chat;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -10,10 +10,12 @@ public class ChatRoom {
 	public void enter(User newUser) {
 		if (isUserNameFree(newUser)) {
 			users.add(newUser);
-			for (User u : users) {
-				u.receiveMessage("user " + newUser.getName() + " entered the chatroom!");
-			}
+			sendToAll(createWelcomeMessage(newUser));
 		}
+	}
+
+	String createWelcomeMessage(User newUser) {
+		return "user " + newUser.getName() + " entered the chatroom";
 	}
 
 	private boolean isUserNameFree(User user) {
@@ -31,6 +33,13 @@ public class ChatRoom {
 		}
 
 		return false;
+	}
+
+	public void sendToAll(String message) {
+		for (User u : users) {
+			u.receiveMessage(message);
+		}
+
 	}
 
 }

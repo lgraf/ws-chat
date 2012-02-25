@@ -1,4 +1,4 @@
-package net.wschat;
+package net.wschat.engine;
 
 import javax.servlet.http.HttpServletRequest;
 
