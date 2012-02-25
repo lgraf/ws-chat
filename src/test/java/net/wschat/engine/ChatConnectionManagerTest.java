@@ -5,6 +5,10 @@ import static org.junit.Assert.*;
 import org.json.JSONException;
 import org.junit.Test;
 
+/**
+ * 
+ * @author eliyo, 25.02.2012
+ */
 public class ChatConnectionManagerTest {
 
 	@Test

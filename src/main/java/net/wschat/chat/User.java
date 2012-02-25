@@ -1,5 +1,9 @@
 package net.wschat.chat;
 
+/**
+ * 
+ * @author eliyo, 25.02.2012
+ */
 public class User {
 
 	private String name;
