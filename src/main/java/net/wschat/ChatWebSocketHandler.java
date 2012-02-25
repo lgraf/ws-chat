@@ -32,9 +32,9 @@ class ChatWebSocket implements OnTextMessage {
 
 	@Override
 	public void onMessage(String msg) {
-		System.out.println("ChatWebSocket.onMessage()");
+		System.out.println("ChatWebSocket.onMessage(" + msg + ")");
 		try {
-			conn.sendMessage("You said: " + msg);
+			conn.sendMessage(msg);
 		} catch (IOException e) {
 			e.printStackTrace();
 			close();
