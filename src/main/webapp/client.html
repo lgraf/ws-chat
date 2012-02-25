@@ -26,7 +26,7 @@
 	 <script type="text/javascript">
 	  // Sample code from a great tutorial at http://angelozerr.wordpress.com/2011/07/25/websockets_jetty_step2/
 	 
-	  if (!window.MozWebSocket)
+	  if (!window.WebSocket)
 		    alert("WebSocket not supported by this browser");
 
 		  function $() {
@@ -49,7 +49,7 @@
 		      //var location = document.location.toString().replace('http://',
 		      //    'ws://').replace('https://', 'wss://');
 		      var location = $v("tf-server-url");
-		      this._ws = new MozWebSocket(location);
+		      this._ws = new WebSocket(location);
 		      this._ws.onopen = this._onopen;
 		      this._ws.onmessage = this._onmessage;
 		      this._ws.onclose = this._onclose;
@@ -88,7 +88,7 @@
 // 		        chat.appendChild(spanText);
 // 		        chat.appendChild(lineBreak);
 // 		        chat.scrollTop = chat.scrollHeight - chat.clientHeight;
-		    	  $("ta-response").value += m.data;
+		    	  $("ta-response").value = m.data;
 		      }
 		    },
 

@@ -1,48 +1,44 @@
 package net.wschat;
 
-import java.io.IOException;
+import java.util.List;
+import java.util.concurrent.CopyOnWriteArrayList;
 
 import javax.servlet.http.HttpServletRequest;
 
 import org.eclipse.jetty.websocket.WebSocket;
-import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
 import org.eclipse.jetty.websocket.WebSocketHandler;
 
-public class ChatWebSocketHandler extends WebSocketHandler {
+/**
+ * 
+ * @author achim, 25.02.2012
+ */
+public class ChatWebSocketHandler extends WebSocketHandler implements MessageListener {
+	private final List<ChatWebSocket> sockets = new CopyOnWriteArrayList<>();
 
+	@Override
 	public WebSocket doWebSocketConnect(HttpServletRequest request, String protocol) {
-		return new ChatWebSocket();
-	}
-}
-
-class ChatWebSocket implements OnTextMessage {
-	private Connection conn;
-
-	@Override
-	public void onClose(int closeCode, String msg) {
-		System.out.println("ChatWebSocket.onClose()");
-		close();
+		final ChatWebSocket socket = new ChatWebSocket();
+		socket.addMessageListener(this);
+		return socket;
 	}
 
 	@Override
-	public void onOpen(Connection conn) {
-		System.out.println("ChatWebSocket.onOpen()");
-		this.conn = conn;
+	public void onOpen(ChatWebSocket socket) {
+		sockets.add(socket);
 	}
 
 	@Override
 	public void onMessage(String msg) {
-		System.out.println("ChatWebSocket.onMessage()");
-		try {
-			conn.sendMessage("You said: " + msg);
-		} catch (IOException e) {
-			e.printStackTrace();
-			close();
-		}
-
+		publishMessage(msg);
 	}
 
-	private void close() {
-		conn.disconnect();
+	@Override
+	public void onClose(ChatWebSocket socket) {
+		sockets.remove(socket);
+	}
+
+	private void publishMessage(String msg) {
+		for (ChatWebSocket socket : sockets)
+			socket.sendMessage(msg);
 	}
 }

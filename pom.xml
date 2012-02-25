@@ -29,8 +29,8 @@
     <properties>
       <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
         <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
-        <compiler.source>1.6</compiler.source>
-       <compiler.target>1.6</compiler.target>
+        <compiler.source>1.7</compiler.source>
+       <compiler.target>1.7</compiler.target>
         <jetty.version>8.0.4.v20111024</jetty.version>
     </properties>
     <dependencies>
