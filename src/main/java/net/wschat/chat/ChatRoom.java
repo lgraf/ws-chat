@@ -3,6 +3,10 @@ package net.wschat.chat;
 import java.util.ArrayList;
 import java.util.List;
 
+/**
+ * 
+ * @author eliyo, 25.02.2012
+ */
 public class ChatRoom {
 
 	private final List<User> users = new ArrayList<>();

@@ -6,6 +6,10 @@ import static org.mockito.Mockito.*;
 import org.junit.Before;
 import org.junit.Test;
 
+/**
+ * 
+ * @author eliyo, 25.02.2012
+ */
 public class ChatRoomTest {
 	private final MessageSender MSG_SENDER = new TestMessageSender();
 	private ChatRoom chatRoom;
