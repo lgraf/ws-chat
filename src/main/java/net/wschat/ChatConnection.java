@@ -4,22 +4,27 @@ import java.io.IOException;
 import java.util.List;
 import java.util.concurrent.CopyOnWriteArrayList;
 
-import org.eclipse.jetty.websocket.WebSocket.Connection;
 import org.eclipse.jetty.websocket.WebSocket.OnTextMessage;
 
-class ChatWebSocket implements OnTextMessage {
+/**
+ * Represents a connection from a chat-client.
+ * 
+ * @author achim, 25.02.2012
+ */
+class ChatConnection implements OnTextMessage {
 	private List<MessageListener> messageListeners = new CopyOnWriteArrayList<>();
 	private Connection conn;
-
-	@Override
-	public void onClose(int closeCode, String msg) {
-		fireClose();
-	}
 
 	@Override
 	public void onOpen(Connection conn) {
 		this.conn = conn;
 		fireOpen();
+	}
+
+	@Override
+	public void onClose(int closeCode, String msg) {
+		fireClose();
+		this.conn = null;
 	}
 
 	@Override

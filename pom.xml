@@ -34,7 +34,7 @@
         <jetty.version>8.0.4.v20111024</jetty.version>
     </properties>
     <dependencies>
-        <!--  JETTY DEPENDENCIES FOR TESTING  -->
+        <!-- APPLICATION -->
         <dependency>
           <groupId>org.eclipse.jetty</groupId>
           <artifactId>jetty-server</artifactId>
@@ -49,7 +49,21 @@
           <groupId>org.eclipse.jetty</groupId>
           <artifactId>jetty-websocket</artifactId>
           <version>${jetty.version}</version>
-        </dependency>       
+        </dependency>
+        
+        <!-- TESTING -->       
+        <dependency>
+				  <groupId>junit</groupId>
+				  <artifactId>junit</artifactId>
+				  <version>4.10</version>
+				  <scope>test</scope>
+				</dependency>
+				<dependency>
+				  <groupId>org.mockito</groupId>
+				  <artifactId>mockito-all</artifactId>
+				  <version>1.9.0</version>
+				  <scope>test</scope>
+ 				</dependency>
     </dependencies>
     <build>
         <plugins>

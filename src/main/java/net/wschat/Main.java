@@ -5,6 +5,7 @@ import org.eclipse.jetty.server.handler.DefaultHandler;
 import org.eclipse.jetty.websocket.WebSocketHandler;
 
 /**
+ * Starts embedded jetty which runs the chat-server.
  * 
  * @author achim, 25.02.2012
  */
