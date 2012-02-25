@@ -1,7 +1,69 @@
-<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/xsd/maven-4.0.0.xsd">
+<project xmlns="http://maven.apache.org/POM/4.0.0" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance"
+    xsi:schemaLocation="http://maven.apache.org/POM/4.0.0 http://maven.apache.org/maven-v4_0_0.xsd">
   <modelVersion>4.0.0</modelVersion>
   <groupId>net.wschat</groupId>
   <artifactId>ws-chat</artifactId>
   <version>0.0.1-SNAPSHOT</version>
   <name>ws-chat</name>
+    <description>Chat-software using Web Sockets</description>
+    <organization>
+        <name>Hackaton</name>
+        <url>http://www.example.org</url>
+    </organization>
+
+    <developers>
+        <developer>
+            <id>achim</id>
+            <name>Achim Wiedemann</name>
+        </developer>
+        <developer>
+            <id>eliyo</id>
+            <name>Eliyo Celebioglu</name>
+        </developer>
+        <developer>
+            <id>luca</id>
+            <name>Luca Graf</name>
+        </developer>
+    </developers>
+
+    <properties>
+      <project.build.sourceEncoding>UTF-8</project.build.sourceEncoding>
+        <project.reporting.outputEncoding>UTF-8</project.reporting.outputEncoding>
+        <compiler.source>1.6</compiler.source>
+       <compiler.target>1.6</compiler.target>
+        <jetty.version>8.0.4.v20111024</jetty.version>
+    </properties>
+    <dependencies>
+        <!--  JETTY DEPENDENCIES FOR TESTING  -->
+        <dependency>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-server</artifactId>
+          <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-webapp</artifactId>
+          <version>${jetty.version}</version>
+        </dependency>
+        <dependency>
+          <groupId>org.eclipse.jetty</groupId>
+          <artifactId>jetty-websocket</artifactId>
+          <version>${jetty.version}</version>
+        </dependency>       
+    </dependencies>
+    <build>
+        <plugins>
+            <plugin>
+                <inherited>true</inherited>
+                <groupId>org.apache.maven.plugins</groupId>
+                <artifactId>maven-compiler-plugin</artifactId>
+                <configuration>
+                    <source>${compiler.source}</source>
+                    <target>${compiler.target}</target>
+                    <optimize>true</optimize>
+                    <debug>true</debug>
+                </configuration>
+            </plugin>
+        </plugins>
+    </build>
 </project>
